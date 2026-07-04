@@ -3,6 +3,7 @@ import { Search, Menu, X, BookOpen, LogOut, FileText, Loader2 } from 'lucide-rea
 import { useState, useEffect, useRef } from 'react';
 import { useAuth } from '../../contexts/AuthContext';
 import { supabase } from '../../lib/supabase';
+import { motion, AnimatePresence } from 'framer-motion';
 
 interface LiveSearchResult {
   id: string;
@@ -24,6 +25,27 @@ const Navbar = () => {
   const [isSearchingLive, setIsSearchingLive] = useState(false);
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Body scroll lock and Escape key listener for Mobile Menu
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      document.body.style.overflow = 'unset';
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [mobileMenuOpen]);
 
   const navLinks = [
     { name: 'Resources', path: '/resources' },
@@ -88,7 +110,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-[#000000]/30 backdrop-blur-lg border-b border-gold-border shadow-soft">
+    <>
+      <nav className="fixed top-0 w-full z-50 bg-[#000000]/30 backdrop-blur-lg border-b border-gold-border shadow-soft">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20 items-center">
           
@@ -229,140 +252,163 @@ const Navbar = () => {
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
-        </div>
-      </div>
+        </div>      </div>
+      </nav>
 
-      {/* Mobile Menu */}
-      {mobileMenuOpen && (
-        <div className="md:hidden glass absolute top-20 left-0 w-full border-b border-gold-border">
-          <div className="px-4 pt-2 pb-6 space-y-2">
-            <div className="py-2 mb-2 relative">
-              <form onSubmit={handleSearch} className="relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  {isSearchingLive ? (
-                    <Loader2 className="h-5 w-5 text-brand-500 animate-spin" />
-                  ) : (
-                    <Search className="h-5 w-5 text-gray-500" />
-                  )}
-                </div>
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => {
-                    if (searchQuery.trim() && liveResults.length > 0) setShowDropdown(true);
-                  }}
-                  placeholder="Search resources..."
-                  className="block w-full pl-10 pr-3 py-3 border border-gold-border rounded-xl leading-5 bg-surface-100 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
-                />
-              </form>
-              
-              {/* Mobile Live Dropdown */}
-              {showDropdown && searchQuery.trim() && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-[#111111] border border-gold-border rounded-xl shadow-xl overflow-hidden py-2 z-50">
-                  {liveResults.length > 0 ? (
-                    <>
-                      {liveResults.map((result) => (
-                        <div
-                          key={result.id}
-                          onClick={() => {
-                            handleSelectResult(result.id);
-                            setMobileMenuOpen(false);
-                          }}
-                          className="px-4 py-3 hover:bg-surface-100 cursor-pointer flex items-center gap-3 transition-colors"
-                        >
-                          <div className="p-2 bg-brand-500/10 rounded-lg shrink-0">
-                            <FileText className="h-4 w-4 text-brand-500" />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="text-sm font-semibold text-white truncate">{result.title}</div>
-                            <div className="text-xs text-gray-400 truncate">{result.subject}</div>
-                          </div>
-                        </div>
-                      ))}
-                      <div 
-                        onClick={(e) => handleSearch(e as any)}
-                        className="px-4 py-3 text-sm text-center text-brand-400 hover:text-brand-300 hover:bg-surface-100 cursor-pointer border-t border-gold-border/20 mt-1"
-                      >
-                        View all results
-                      </div>
-                    </>
-                  ) : (
-                    <div className="px-4 py-4 text-center text-sm text-gray-400">
-                      No matching resources found.
-                    </div>
-                  )}
-                </div>
-              )}
-            </div>
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <div className="md:hidden">
+            {/* Fullscreen Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => setMobileMenuOpen(false)}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
+              aria-hidden="true"
+            />
             
-            {navLinks.map((link) => (
-              <Link
-                key={link.name}
-                to={link.path}
-                onClick={() => setMobileMenuOpen(false)}
-                className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
-                  location.pathname === link.path
-                    ? 'text-black bg-gradient-to-r from-brand-500 to-brand-600'
-                    : 'text-gray-300 hover:text-brand-400 hover:bg-surface-50'
-                }`}
-              >
-                {link.name}
-              </Link>
-            ))}
-            {user ? (
-              <>
-                <Link
-                  to="/profile"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-gray-300 hover:text-brand-400 hover:bg-surface-50 transition-colors"
-                >
-                  {user.user_metadata?.avatar_url && !imageError ? (
-                    <img
-                      src={user.user_metadata.avatar_url}
-                      alt="Profile"
-                      onError={() => setImageError(true)}
-                      className="h-8 w-8 rounded-full object-cover border border-brand-500/30"
+            {/* Menu Panel */}
+            <motion.div
+              initial={{ y: -20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              exit={{ y: -20, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed top-20 left-0 w-full z-40 glass border-b border-gold-border max-h-[calc(100dvh-5rem)] overflow-y-auto overscroll-contain"
+              style={{ paddingBottom: 'max(2rem, env(safe-area-inset-bottom))' }}
+            >
+              <div className="px-4 pt-2 pb-6 space-y-2">
+                <div className="py-2 mb-2 relative">
+                  <form onSubmit={handleSearch} className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      {isSearchingLive ? (
+                        <Loader2 className="h-5 w-5 text-brand-500 animate-spin" />
+                      ) : (
+                        <Search className="h-5 w-5 text-gray-500" />
+                      )}
+                    </div>
+                    <input
+                      type="text"
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      onFocus={() => {
+                        if (searchQuery.trim() && liveResults.length > 0) setShowDropdown(true);
+                      }}
+                      placeholder="Search resources..."
+                      className="block w-full pl-10 pr-3 py-3 border border-gold-border rounded-xl leading-5 bg-surface-100 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-brand-500"
                     />
-                  ) : (
-                    <div className="h-8 w-8 rounded-full bg-brand-500 text-black flex items-center justify-center font-bold text-sm border border-brand-500/30">
-                      {user.user_metadata?.username?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
+                  </form>
+                  
+                  {/* Mobile Live Dropdown */}
+                  {showDropdown && searchQuery.trim() && (
+                    <div className="absolute top-full left-0 right-0 mt-2 bg-[#111111] border border-gold-border rounded-xl shadow-xl overflow-hidden py-2 z-50">
+                      {liveResults.length > 0 ? (
+                        <>
+                          {liveResults.map((result) => (
+                            <div
+                              key={result.id}
+                              onClick={() => {
+                                handleSelectResult(result.id);
+                                setMobileMenuOpen(false);
+                              }}
+                              className="px-4 py-3 hover:bg-surface-100 cursor-pointer flex items-center gap-3 transition-colors"
+                            >
+                              <div className="p-2 bg-brand-500/10 rounded-lg shrink-0">
+                                <FileText className="h-4 w-4 text-brand-500" />
+                              </div>
+                              <div className="flex-1 min-w-0">
+                                <div className="text-sm font-semibold text-white truncate">{result.title}</div>
+                                <div className="text-xs text-gray-400 truncate">{result.subject}</div>
+                              </div>
+                            </div>
+                          ))}
+                          <div 
+                            onClick={(e) => handleSearch(e as any)}
+                            className="px-4 py-3 text-sm text-center text-brand-400 hover:text-brand-300 hover:bg-surface-100 cursor-pointer border-t border-gold-border/20 mt-1"
+                          >
+                            View all results
+                          </div>
+                        </>
+                      ) : (
+                        <div className="px-4 py-4 text-center text-sm text-gray-400">
+                          No matching resources found.
+                        </div>
+                      )}
                     </div>
                   )}
-                  Profile
-                </Link>
-                <button
-                  onClick={() => {
-                    signOut();
-                    setMobileMenuOpen(false);
-                  }}
-                  className="block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-red-400 hover:bg-red-900/20 transition-colors"
-                >
-                  Sign Out
-                </button>
-              </>
-            ) : (
-              <div className="pt-4 flex flex-col gap-3">
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-center px-4 py-3 border border-gold-border rounded-full text-base font-medium text-white hover:bg-surface-50 transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  to="/signup"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-center px-4 py-3 bg-gradient-to-r from-brand-500 to-brand-600 rounded-full text-base font-medium text-black shadow-gold-soft hover:scale-[1.02] transition-transform"
-                >
-                  Create Account
-                </Link>
+                </div>
+                
+                {navLinks.map((link) => (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`block px-4 py-3 rounded-xl text-base font-medium transition-colors ${
+                      location.pathname === link.path
+                        ? 'text-black bg-gradient-to-r from-brand-500 to-brand-600'
+                        : 'text-gray-300 hover:text-brand-400 hover:bg-surface-50'
+                    }`}
+                  >
+                    {link.name}
+                  </Link>
+                ))}
+                {user ? (
+                  <>
+                    <Link
+                      to="/profile"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 rounded-xl text-base font-medium text-gray-300 hover:text-brand-400 hover:bg-surface-50 transition-colors"
+                    >
+                      {user.user_metadata?.avatar_url && !imageError ? (
+                        <img
+                          src={user.user_metadata.avatar_url}
+                          alt="Profile"
+                          onError={() => setImageError(true)}
+                          className="h-8 w-8 rounded-full object-cover border border-brand-500/30"
+                        />
+                      ) : (
+                        <div className="h-8 w-8 rounded-full bg-brand-500 text-black flex items-center justify-center font-bold text-sm border border-brand-500/30">
+                          {user.user_metadata?.username?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || 'U'}
+                        </div>
+                      )}
+                      Profile
+                    </Link>
+                    <button
+                      onClick={() => {
+                        signOut();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="block w-full text-left px-4 py-3 rounded-xl text-base font-medium text-red-400 hover:bg-red-900/20 transition-colors"
+                    >
+                      Sign Out
+                    </button>
+                  </>
+                ) : (
+                  <div className="pt-4 flex flex-col gap-3">
+                    <Link
+                      to="/login"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block text-center px-4 py-3 border border-gold-border rounded-full text-base font-medium text-white hover:bg-surface-50 transition-colors"
+                    >
+                      Sign In
+                    </Link>
+                    <Link
+                      to="/signup"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block text-center px-4 py-3 bg-gradient-to-r from-brand-500 to-brand-600 rounded-full text-base font-medium text-black shadow-gold-soft hover:scale-[1.02] transition-transform"
+                    >
+                      Create Account
+                    </Link>
+                  </div>
+                )}
               </div>
-            )}
+            </motion.div>
           </div>
-        </div>
-      )}
-    </nav>
+        )}
+      </AnimatePresence>
+    </>
   );
 };
 

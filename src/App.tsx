@@ -16,6 +16,7 @@ const Search = lazy(() => import('./pages/Search'));
 const Login = lazy(() => import('./pages/Login'));
 const Signup = lazy(() => import('./pages/Signup'));
 const Upload = lazy(() => import('./pages/Upload'));
+const AuthCallback = lazy(() => import('./pages/AuthCallback'));
 
 function App() {
   return (
@@ -40,6 +41,7 @@ function App() {
               <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
               {/* Protected Routes — require authentication */}
               <Route 
                 path="/profile" 

@@ -1,0 +1,51 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+    /* Forcing dark mode variables to apply globally as default for the matte black theme */
+    --background: 0 0% 0%; /* Matte Black #000000 */
+    --foreground: 0 0% 100%; /* #FFFFFF */
+    --card: 0 0% 7%; /* #111111 */
+    --card-foreground: 0 0% 100%;
+    --border: 51 100% 50%; /* Golden #FFD700 base for rgba calculations */
+  }
+
+  .dark {
+    --background: 0 0% 0%;
+    --foreground: 0 0% 100%;
+    --card: 0 0% 7%;
+    --card-foreground: 0 0% 100%;
+    --border: 51 100% 50%;
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-[hsl(var(--background))] text-[hsl(var(--foreground))] antialiased transition-colors duration-300;
+  }
+  
+  /* Selection color for luxury feel */
+  ::selection {
+    @apply bg-brand-500/30 text-white;
+  }
+}
+
+@layer utilities {
+  .glass {
+    background-color: rgba(17, 17, 17, 0.4);
+    border: 1px solid rgba(255, 215, 0, 0.12);
+    @apply backdrop-blur-md;
+  }
+  .glass-card {
+    background-color: rgba(17, 17, 17, 0.45);
+    border: 1px solid rgba(255, 215, 0, 0.12);
+    box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.5);
+    @apply backdrop-blur-xl rounded-2xl md:rounded-3xl p-6 md:p-8;
+  }
+  .text-gradient {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-brand-400 to-brand-600;
+  }
+}

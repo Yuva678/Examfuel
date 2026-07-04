@@ -4,6 +4,7 @@ import Layout from './components/layout/Layout';
 import TargetCursor from './components/TargetCursor';
 import { AuthProvider } from './contexts/AuthContext';
 import ProtectedRoute from './components/auth/ProtectedRoute';
+import ScrollToTop from './components/ScrollToTop';
 
 // Lazy load pages
 const Home = lazy(() => import('./pages/Home'));
@@ -22,6 +23,7 @@ function App() {
   return (
     <AuthProvider>
       <Router>
+        <ScrollToTop />
         <TargetCursor 
           spinDuration={2}
           hideDefaultCursor

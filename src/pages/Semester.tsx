@@ -6,9 +6,11 @@ import { supabase } from '../lib/supabase';
 interface SemesterData {
   number: number;
   title: string;
-  subjects: string[];
+  branches: Record<string, string[]>;
   description: string;
 }
+
+const BRANCHES = ["CSE", "ECE", "AI/ML", "EEE"];
 
 const Semester = () => {
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ const Semester = () => {
   const [selectedSemester, setSelectedSemester] = useState<number | null>(
     initialSemester && initialSemester >= 1 && initialSemester <= 8 ? initialSemester : null
   );
+  const [selectedBranch, setSelectedBranch] = useState<string>("CSE");
   const [semesterCounts, setSemesterCounts] = useState<Record<string, number>>({});
   const [subjectCounts, setSubjectCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(true);
@@ -71,61 +74,97 @@ const Semester = () => {
       number: 1,
       title: "Semester 1",
       description: "Foundation courses in physical sciences and basic engineering principles.",
-      subjects: ["Engineering Physics", "Engineering Chemistry", "Basic Electrical Engineering", "Programming in C", "Workshop Practice", "Universal Human Values"]
+      branches: {
+        "CSE": ["Engineering Physics", "Engineering Chemistry", "Basic Electrical Engineering", "Programming in C", "Workshop Practice", "Universal Human Values"],
+        "ECE": ["Engineering Physics", "Engineering Chemistry", "Basic Electrical Engineering", "Programming in C", "Workshop Practice", "Universal Human Values"],
+        "AI/ML": ["Engineering Physics", "Engineering Chemistry", "Basic Electrical Engineering", "Programming in C", "Workshop Practice", "Universal Human Values"],
+        "EEE": ["Engineering Physics", "Engineering Chemistry", "Basic Electrical Engineering", "Programming in C", "Workshop Practice", "Universal Human Values"]
+      }
     },
     {
       number: 2,
       title: "Semester 2",
       description: "Advanced math models, fundamentals of circuitry, and engineering graphics.",
-      subjects: ["Engineering Mathematics I", "Basic Electronics", "Engineering Mechanics", "HTML & CSS", "Design Thinking", "Constitution of India"]
+      branches: {
+        "CSE": ["Engineering Mathematics I", "Basic Electronics", "Engineering Mechanics", "HTML & CSS", "Design Thinking", "Constitution of India"],
+        "ECE": ["Engineering Mathematics I", "Basic Electronics", "Engineering Mechanics", "HTML & CSS", "Design Thinking", "Constitution of India"],
+        "AI/ML": ["Engineering Mathematics I", "Basic Electronics", "Engineering Mechanics", "HTML & CSS", "Design Thinking", "Constitution of India"],
+        "EEE": ["Engineering Mathematics I", "Basic Electronics", "Engineering Mechanics", "HTML & CSS", "Design Thinking", "Constitution of India"]
+      }
     },
     {
       number: 3,
       title: "Semester 3",
       description: "Introduction to logical data structures, algorithms, and digital circuits.",
-      subjects: ["Engineering Mathematics II", "Discrete Mathematics", "Data Structures", "Digital Electronics", "Technical Communication", "Environmental Studies"]
+      branches: {
+        "CSE": ["Engineering Mathematics II", "Discrete Mathematics", "Data Structures", "Digital Electronics", "Technical Communication", "Environmental Studies"],
+        "ECE": ["Engineering Mathematics II", "Network Theory", "Electronic Devices", "Digital System Design", "Signals and Systems", "Environmental Studies"],
+        "AI/ML": ["Engineering Mathematics II", "Discrete Mathematics", "Data Structures", "Intro to AI", "Python Programming", "Environmental Studies"],
+        "EEE": ["Engineering Mathematics II", "Network Theory", "Electrical Machines I", "Electromagnetic Fields", "Analog Electronics", "Environmental Studies"]
+      }
     },
     {
       number: 4,
       title: "Semester 4",
       description: "Core subjects including Biology, Microcontrollers, Algorithms, DBMS, and Python programming.",
-      subjects: [
-        "Biology for Engineers", 
-        "Microcontroller and Embedded Systems", 
-        "Analysis and Design of Algorithms", 
-        "Database Management System", 
-        "Professional Skills for the Work Place", 
-        "Algorithms Lab", 
-        "Yoga", 
-        "Universal human values course", 
-        "Object Oriented Programming with Python", 
-        "PROCTOR-CSE", 
-        "CLUB ACTIVITIES"
-      ]
+      branches: {
+        "CSE": [
+          "Biology for Engineers", "Microcontroller and Embedded Systems", "Analysis and Design of Algorithms", "Database Management System", "Professional Skills for the Work Place", "Algorithms Lab", "Yoga", "Universal human values course", "Object Oriented Programming with Python", "PROCTOR-CSE", "CLUB ACTIVITIES"
+        ],
+        "ECE": [
+          "Analog Circuits", "Microcontrollers", "Control Systems", "Communication Theory", "Professional Skills for the Work Place", "Yoga", "Universal human values course", "CLUB ACTIVITIES"
+        ],
+        "AI/ML": [
+          "Biology for Engineers", "Machine Learning Foundations", "Database Management System", "Optimization Techniques", "Professional Skills for the Work Place", "Algorithms Lab", "Yoga", "Universal human values course", "CLUB ACTIVITIES"
+        ],
+        "EEE": [
+          "Electrical Machines II", "Power Systems I", "Control Systems", "Digital Electronics", "Professional Skills for the Work Place", "Yoga", "Universal human values course", "CLUB ACTIVITIES"
+        ]
+      }
     },
     {
       number: 5,
       title: "Semester 5",
       description: "Core database architectures, computer network models, and security principles.",
-      subjects: ["Database Management Systems (DBMS)", "Computer Networks (CN)", "Software Engineering", "Microprocessors", "Cyber Security", "DevOps"]
+      branches: {
+        "CSE": ["Database Management Systems (DBMS)", "Computer Networks (CN)", "Software Engineering", "Microprocessors", "Cyber Security", "DevOps"],
+        "ECE": ["Digital Signal Processing", "Microprocessors and Microcontrollers", "Antennas and Wave Propagation", "VLSI Design", "Cyber Security"],
+        "AI/ML": ["Artificial Neural Networks", "Computer Networks (CN)", "Software Engineering", "Data Mining", "Cyber Security", "DevOps"],
+        "EEE": ["Power Systems II", "Power Electronics", "Microprocessors and Microcontrollers", "Signals and Systems", "Cyber Security"]
+      }
     },
     {
       number: 6,
       title: "Semester 6",
       description: "Theory of computation, compiler design, and introductory AI domains.",
-      subjects: ["Compiler Design", "Theory of Computation", "Artificial Intelligence", "Web Technology", "Embedded Systems", "IoT"]
+      branches: {
+        "CSE": ["Compiler Design", "Theory of Computation", "Artificial Intelligence", "Web Technology", "Embedded Systems", "IoT"],
+        "ECE": ["Digital Communication", "Control Systems", "Computer Networks", "Embedded Systems", "IoT"],
+        "AI/ML": ["Machine Learning", "Deep Learning Foundations", "Natural Language Processing", "Web Technology", "Embedded Systems", "IoT"],
+        "EEE": ["Electric Drives", "Switchgear and Protection", "Control Systems", "Embedded Systems", "IoT"]
+      }
     },
     {
       number: 7,
       title: "Semester 7",
       description: "High-performance distributed systems, cloud computing, and neural nets.",
-      subjects: ["Machine Learning", "Distributed Systems", "Cloud Computing", "Cryptography", "Blockchain", "Professional Ethics"]
+      branches: {
+        "CSE": ["Machine Learning", "Distributed Systems", "Cloud Computing", "Cryptography", "Blockchain", "Professional Ethics"],
+        "ECE": ["Wireless Communication", "Optical Communication", "Microwave Engineering", "Cryptography", "Professional Ethics"],
+        "AI/ML": ["Advanced Deep Learning", "Reinforcement Learning", "Cloud Computing", "Computer Vision", "Blockchain", "Professional Ethics"],
+        "EEE": ["High Voltage Engineering", "Power System Operation", "Renewable Energy Systems", "Cryptography", "Professional Ethics"]
+      }
     },
     {
       number: 8,
       title: "Semester 8",
       description: "Specialized capstone topics in computer vision, deep learning, and research.",
-      subjects: ["Deep Learning", "Big Data", "Edge Computing", "Computer Vision", "Full Stack Development", "Research Methodology"]
+      branches: {
+        "CSE": ["Deep Learning", "Big Data", "Edge Computing", "Computer Vision", "Full Stack Development", "Research Methodology"],
+        "ECE": ["Satellite Communication", "Radar Systems", "Edge Computing", "Wireless Sensor Networks", "Research Methodology"],
+        "AI/ML": ["Generative AI", "Big Data", "AI in Healthcare", "Edge Computing", "Full Stack Development", "Research Methodology"],
+        "EEE": ["Smart Grid Technology", "FACTS Controllers", "Electric Vehicles", "Edge Computing", "Research Methodology"]
+      }
     }
   ];
 
@@ -199,7 +238,8 @@ const Semester = () => {
 
       {/* Dynamic Subject Drawer */}
       {selectedSemester !== null && (() => {
-        const allSubjects = semesters[selectedSemester - 1].subjects;
+        const semesterData = semesters[selectedSemester - 1];
+        const allSubjects = semesterData.branches[selectedBranch] || [];
 
         return (
           <div className="glass-card border border-gold-border/30 bg-[#111111]/70 backdrop-blur-xl p-8 rounded-3xl animate-fade-in">
@@ -209,12 +249,29 @@ const Semester = () => {
                   <BookOpen className="h-6 w-6 text-brand-500" /> Core Subjects — Semester {selectedSemester}
                 </h2>
                 <p className="text-gray-400 text-sm mt-1">
-                  Select a subject below to view notes, previous year papers, and slides.
+                  Select a branch and subject below to view notes, previous year papers, and slides.
                 </p>
               </div>
               <div className="flex items-center gap-1.5 px-3 py-1 rounded-lg bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-bold uppercase tracking-wider">
                 <Award className="h-4 w-4" /> Recommended Syllabus
               </div>
+            </div>
+
+            {/* Branch Selector Tabs */}
+            <div className="flex flex-wrap items-center gap-2 mb-8">
+              {BRANCHES.map((branch) => (
+                <button
+                  key={branch}
+                  onClick={() => setSelectedBranch(branch)}
+                  className={`px-5 py-2 rounded-xl text-sm font-bold transition-all duration-300 ${
+                    selectedBranch === branch
+                      ? 'bg-brand-500 text-black shadow-gold'
+                      : 'bg-white/5 text-gray-400 hover:bg-white/10 hover:text-white border border-white/5'
+                  }`}
+                >
+                  {branch}
+                </button>
+              ))}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">

@@ -29,6 +29,15 @@ const SUBJECTS = [
   'Professional Skills for the Work Place', 'Algorithms Lab',
   'Yoga', 'Universal human values course', 'Object Oriented Programming with Python',
   'PROCTOR-CSE', 'CLUB ACTIVITIES',
+  'Engineering Mathematics-I [23MAT11]', 'Engineering Physics [23PHY12]',
+  'Communicative English [23ENG16]', 'Basic Electronics [23ELN14]',
+  'Introduction to Cyber Security [23CYB151]', 'Problem Solving through C [23PSC13]',
+  'Adalitha Kannada [23KAK17]', 'Scientific Foundations of Health [23SFH18]',
+  'Proctor-PHY [PROCTOR]', 'LIB-PHY [LIBPHY]',
+  'Advanced C Programming [23ACP23]', 'Engineering Chemistry [23CHE22]',
+  'Engineering Mathematics-II [23MAT21]', 'Professional Writing Skills in English [23PWS26]',
+  'Computer Aided Engineering Drawing [23CED23]', 'Basic Electrical Engineering [23ELE24]',
+  'Innovation & Design Thinking [23IDT28]', 'Indian Constitution [23ICO27]',
   'Other',
 ];
 

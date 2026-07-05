@@ -75,10 +75,26 @@ const Semester = () => {
       title: "Semester 1",
       description: "Foundation courses in physical sciences and basic engineering principles.",
       branches: {
-        "CSE": ["Engineering Physics", "Engineering Chemistry", "Basic Electrical Engineering", "Programming in C", "Workshop Practice", "Universal Human Values"],
-        "ECE": ["Engineering Physics", "Engineering Chemistry", "Basic Electrical Engineering", "Programming in C", "Workshop Practice", "Universal Human Values"],
-        "AI/ML": ["Engineering Physics", "Engineering Chemistry", "Basic Electrical Engineering", "Programming in C", "Workshop Practice", "Universal Human Values"],
-        "EEE": ["Engineering Physics", "Engineering Chemistry", "Basic Electrical Engineering", "Programming in C", "Workshop Practice", "Universal Human Values"]
+        "CSE": [
+          "Engineering Mathematics-I [23MAT11]", "Engineering Physics [23PHY12]", "Communicative English [23ENG16]", 
+          "Basic Electronics [23ELN14]", "Introduction to Cyber Security [23CYB151]", "Problem Solving through C [23PSC13]", 
+          "Adalitha Kannada [23KAK17]", "Scientific Foundations of Health [23SFH18]", "Proctor-PHY [PROCTOR]", "LIB-PHY [LIBPHY]"
+        ],
+        "ECE": [
+          "Engineering Mathematics-I [23MAT11]", "Engineering Physics [23PHY12]", "Communicative English [23ENG16]", 
+          "Basic Electronics [23ELN14]", "Introduction to Cyber Security [23CYB151]", "Problem Solving through C [23PSC13]", 
+          "Adalitha Kannada [23KAK17]", "Scientific Foundations of Health [23SFH18]", "Proctor-PHY [PROCTOR]", "LIB-PHY [LIBPHY]"
+        ],
+        "AI/ML": [
+          "Engineering Mathematics-I [23MAT11]", "Engineering Physics [23PHY12]", "Communicative English [23ENG16]", 
+          "Basic Electronics [23ELN14]", "Introduction to Cyber Security [23CYB151]", "Problem Solving through C [23PSC13]", 
+          "Adalitha Kannada [23KAK17]", "Scientific Foundations of Health [23SFH18]", "Proctor-PHY [PROCTOR]", "LIB-PHY [LIBPHY]"
+        ],
+        "EEE": [
+          "Engineering Mathematics-I [23MAT11]", "Engineering Physics [23PHY12]", "Communicative English [23ENG16]", 
+          "Basic Electronics [23ELN14]", "Introduction to Cyber Security [23CYB151]", "Problem Solving through C [23PSC13]", 
+          "Adalitha Kannada [23KAK17]", "Scientific Foundations of Health [23SFH18]", "Proctor-PHY [PROCTOR]", "LIB-PHY [LIBPHY]"
+        ]
       }
     },
     {
@@ -86,10 +102,26 @@ const Semester = () => {
       title: "Semester 2",
       description: "Advanced math models, fundamentals of circuitry, and engineering graphics.",
       branches: {
-        "CSE": ["Engineering Mathematics I", "Basic Electronics", "Engineering Mechanics", "HTML & CSS", "Design Thinking", "Constitution of India"],
-        "ECE": ["Engineering Mathematics I", "Basic Electronics", "Engineering Mechanics", "HTML & CSS", "Design Thinking", "Constitution of India"],
-        "AI/ML": ["Engineering Mathematics I", "Basic Electronics", "Engineering Mechanics", "HTML & CSS", "Design Thinking", "Constitution of India"],
-        "EEE": ["Engineering Mathematics I", "Basic Electronics", "Engineering Mechanics", "HTML & CSS", "Design Thinking", "Constitution of India"]
+        "CSE": [
+          "Advanced C Programming [23ACP23]", "Engineering Chemistry [23CHE22]", "Engineering Mathematics-II [23MAT21]", 
+          "Professional Writing Skills in English [23PWS26]", "Computer Aided Engineering Drawing [23CED23]", 
+          "Basic Electrical Engineering [23ELE24]", "Innovation & Design Thinking [23IDT28]", "Indian Constitution [23ICO27]"
+        ],
+        "ECE": [
+          "Advanced C Programming [23ACP23]", "Engineering Chemistry [23CHE22]", "Engineering Mathematics-II [23MAT21]", 
+          "Professional Writing Skills in English [23PWS26]", "Computer Aided Engineering Drawing [23CED23]", 
+          "Basic Electrical Engineering [23ELE24]", "Innovation & Design Thinking [23IDT28]", "Indian Constitution [23ICO27]"
+        ],
+        "AI/ML": [
+          "Advanced C Programming [23ACP23]", "Engineering Chemistry [23CHE22]", "Engineering Mathematics-II [23MAT21]", 
+          "Professional Writing Skills in English [23PWS26]", "Computer Aided Engineering Drawing [23CED23]", 
+          "Basic Electrical Engineering [23ELE24]", "Innovation & Design Thinking [23IDT28]", "Indian Constitution [23ICO27]"
+        ],
+        "EEE": [
+          "Advanced C Programming [23ACP23]", "Engineering Chemistry [23CHE22]", "Engineering Mathematics-II [23MAT21]", 
+          "Professional Writing Skills in English [23PWS26]", "Computer Aided Engineering Drawing [23CED23]", 
+          "Basic Electrical Engineering [23ELE24]", "Innovation & Design Thinking [23IDT28]", "Indian Constitution [23ICO27]"
+        ]
       }
     },
     {
